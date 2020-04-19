@@ -14,22 +14,24 @@ app.use(express.static(path.join(__dirname, 'public')));
 const botName = 'ChatCord bot'
 // Run when client connects
 io.on('connection', socket =>{
-    // Welcome client
-    socket.emit('message', formatMessage(botName,'Welcome to the Chat'));
+    socket.on('joinRoom', ({username, room})=>{
+        // Welcome client
+        socket.emit('message', formatMessage(botName,'Welcome to the Chat'));
 
-    // Broadcast when a user connects
-    socket.broadcast.emit('message', formatMessage(botName,'A user has joined the chat'));
-
-    // Runs when client disconnects
-    socket.on('disconnect', ()=> {
-        io.emit('message', formatMessage(botName, 'A user has left the chat'));
+        // Broadcast when a user connects
+        socket.broadcast.emit('message', formatMessage(botName,'A user has joined the chat'));
     });
 
     // Listen for chatMessage
     socket.on('chatMessage', (msg)=>{
         io.emit('message', formatMessage('USER', msg));
     })
-})
+
+    // Runs when client disconnects
+    socket.on('disconnect', ()=> {
+        io.emit('message', formatMessage(botName, 'A user has left the chat'));
+    });
+});
 
 const PORT = process.env.PORT || 3000
 
