@@ -21,11 +21,12 @@ io.on('connection', socket =>{
         const user = userJoin(socket.id, username, room);
 
         socket.join(user.room)
+        
         // Welcome current user
         socket.emit('message', formatMessage(botName,'Welcome to the Chat'));
 
         // Broadcast when a user connects
-        socket.broadcast.emit('message', formatMessage(botName,'A user has joined the chat'));
+        socket.broadcast.to(user.room).emit('message', formatMessage(botName,'A user has joined the chat'));
     });
 
     // Listen for chatMessage
