@@ -30,5 +30,7 @@ function getRoomUsers(room){
 
 module.exports = {
     userJoin,
-    getCurrentUser
+    getCurrentUser,
+    userLeave,
+    getRoomUsers
 }
